@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -154,15 +155,15 @@ class EmployeeController extends Controller
         $employee->age = $request->age;
         $employee->position_id = $request->position;
 
-        //Mendapatkan update file baru
+
         if ($request->hasFile('cv')) {
             $file = $request->file('cv');
             $originalFilename = $file->getClientOriginalName();
-            $encryptedFilename = $file->hashName();
-            $file->store('public/files');
+            // Simpan file langsung dengan nama hash otomatis oleh Laravel
+            $path = $file->store('public/files');
 
             $employee->original_filename = $originalFilename;
-            $employee->encrypted_filename = $encryptedFilename;
+
         }
 
         $employee->save();
